@@ -1,4 +1,30 @@
-local Players = game:GetService("Players")
-task.wait(0.3)
-Players.RespawnTime = math.huge
-print("Anti-Respawn is Working!")
+local function dropAccessories(player)
+	local character = player.Character
+	if not character then return end
+
+	-- Iterate through all accessories in the player's character
+	for _, accessory in pairs(character:GetChildren()) do
+		-- Check if the accessory is a part of the player's accessories
+		if accessory:IsA("Accessory") then
+			-- Get the accessory's handle (the part that attaches to the character)
+			local handle = accessory:FindFirstChild("Handle")
+			if handle then
+				-- Set the handle position to where the accessory is currently located
+				handle.Anchored = false
+				handle.CanCollide = true
+				handle.Parent = workspace
+
+				-- Optionally, you can destroy the accessory from the character
+				accessory:Destroy()
+			end
+		end
+	end
+end
+
+-- Call the function to drop accessories for a specific player (e.g., for the local player)
+game.Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function(character)
+		-- Example: Drop all accessories for the player when they spawn
+		dropAccessories(player)
+	end)
+end)

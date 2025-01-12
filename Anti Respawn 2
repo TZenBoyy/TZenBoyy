@@ -1,0 +1,4 @@
+local Players = game:GetService("Players")
+task.wait(0.3)
+Players.CharacterAutoLoads = false
+print("Anti-Respawn is Working!")

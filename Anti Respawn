@@ -1,3 +1,22 @@
-local Players = game:GetService ("Players")
-task.wait(0.3)
-Players.CharacterAutoLoads = false
+-- Local script to set player dead and prevent respawn
+local player = game.Players.LocalPlayer
+
+-- Function to disable respawn
+local function disableRespawn()
+    -- Wait until the player character is loaded
+    player.CharacterAdded:Connect(function(character)
+        -- Set the player's health to 0 and disable respawn
+        character:WaitForChild("Humanoid").Health = 0
+        player.RespawnLocation = nil -- Ensures no respawn location is set
+    end)
+end
+
+-- Call the function to disable respawn and make the player dead
+disableRespawn()
+
+-- You can also use this event if you want to trigger the death on player health change
+player.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid").Died:Connect(function()
+        player.RespawnLocation = nil
+    end)
+end)
